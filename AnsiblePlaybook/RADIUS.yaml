@@ -1,0 +1,20 @@
+---
+- name: RADIUS test with ansible connection
+  hosts: routers
+  gather_facts: false
+  tasks:
+
+    - name: Add RADIUS client
+      community.routeros.command:
+        commands:
+          - /radius add service=hotspot address=35.227.71.209 secret="testing123"
+  
+    - name: Verify RADIUS client addition
+      community.routeros.command:
+        commands:
+          - /radius print
+      register: radius_clients
+
+    - name: Show RADIUS clients
+      debug:
+        var: radius_clients.stdout_lines
